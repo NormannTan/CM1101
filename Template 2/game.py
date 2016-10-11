@@ -378,11 +378,11 @@ def move(exits, direction):
 def win():
     reception_list = [item_biscuits, item_handbook, item_pen, item_id, item_laptop, item_money]
     if rooms["Tutor"]["items"] == [item_biscuits]:
-        victory = True
-        return
+        return True
     elif all(x in rooms["Reception"]["items"] for x in reception_list):
-        victory = True
-        return
+        return True
+    else:
+        return False
 
 # This is the entry point of our program
 def main():
@@ -400,8 +400,7 @@ def main():
         execute_command(command)
 
         #check win
-        win()
-        if victory:
+        if win():
             print(clear)
             print("You win!")
             break
@@ -413,4 +412,3 @@ def main():
 # See https://docs.python.org/3.4/library/__main__.html for explanation
 if __name__ == "__main__":
     main()
-

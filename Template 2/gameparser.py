@@ -81,7 +81,3 @@ def normalise_input(user_input):
     #Remove whitespace
     no_whitespace = no_punct.strip()
     return filter_words(no_whitespace.split(), skip_words)
-
-    #
-    # COMPLETE ME!
-    #
