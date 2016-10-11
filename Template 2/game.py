@@ -232,7 +232,7 @@ def execute_go(direction):
         for count in range(3):
             time.sleep(1)
             print("\n.")
-        time.sleep(1)
+        input("Press any key to continue")
     else:
         print(clear)
         print(".\n.\nYou cannot go there.\n.\n.")
@@ -257,7 +257,7 @@ def execute_take(item_id):
             if total_mass >= 3000:
                 print(clear)
                 print("You are carrying too much. Drop something first!")
-                time.sleep(1)
+                input("Press any key to continue")
                 print(clear)
                 return
             #else, take item
@@ -265,14 +265,14 @@ def execute_take(item_id):
             inventory.append(e)
             print(clear)
             print("You took the " + item_id)
-            time.sleep(1)
+            input("Press any key to continue")
             print(clear)
             return
         else:
             continue
     print(clear)
     print("You cannot take that.")
-    time.sleep(1)
+    input("Press any key to continue")
     print(clear)
 
 
@@ -290,16 +290,14 @@ def execute_drop(item_id):
             current_room["items"].append(e)
             print(clear)
             print("You dropped the " + item_id)
-            time.sleep(1)
+            input("Press any key to continue")
             print(clear)
-            if rooms["Tutor"]["items"] == [item_biscuits]:
-                victory = True
             return
         else:
             continue
     print(clear)
     print("You cannot drop that.")
-    time.sleep(1)
+    input("Press any key to continue")
     print(clear)
 
 
@@ -377,6 +375,14 @@ def move(exits, direction):
     # Next room to go to
     return rooms[exits[direction]]
 
+def win():
+    reception_list = [item_biscuits, item_handbook, item_pen, item_id, item_laptop, item_money]
+    if rooms["Tutor"]["items"] == [item_biscuits]:
+        victory = True
+        return
+    elif all(x in rooms["Reception"]["items"] for x in reception_list):
+        victory = True
+        return
 
 # This is the entry point of our program
 def main():
@@ -394,6 +400,7 @@ def main():
         execute_command(command)
 
         #check win
+        win()
         if victory:
             print(clear)
             print("You win!")
