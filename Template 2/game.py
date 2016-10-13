@@ -224,8 +224,10 @@ def execute_go(direction):
     (and prints the name of the room into which the player is
     moving). Otherwise, it prints "You cannot go there."
     """
-    global current_room
+    #global current_room
+    # check if exit is valid
     if is_valid_exit(current_room["exits"], direction):
+    	# execute move function
         current_room = move(current_room["exits"], direction)
         print(clear)
         print("Moving to " + current_room["name"])
@@ -244,9 +246,7 @@ def execute_take(item_id):
     there is no such item in the room, this function prints
     "You cannot take that."
     """
-    global inventory
-    global current_room
-    
+
     for e in current_room["items"]:
         if e["id"] == item_id:
             #check if overburdened
@@ -254,7 +254,7 @@ def execute_take(item_id):
             for m in inventory:
                 total_mass += m["mass"]
             total_mass += e["mass"]
-            if total_mass >= 3000:
+            if total_mass >= max_mass:
                 print(clear)
                 print("You are carrying too much. Drop something first!")
                 input("Press any key to continue")
@@ -281,9 +281,6 @@ def execute_drop(item_id):
     player's inventory to list of items in the current room. However, if there is
     no such item in the inventory, this function prints "You cannot drop that."
     """
-    global inventory
-    global current_room
-    global victory
     for e in inventory:
         if e["id"] == item_id:
             inventory.remove(e)
@@ -329,10 +326,6 @@ def execute_command(command):
             execute_drop(command[1])
         else:
             print("Drop what?")
-
-    elif command[0] == "cheattowin":
-        global victory
-        victory = True
 
     else:
         print("This makes no sense.")
