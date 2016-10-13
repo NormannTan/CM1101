@@ -38,13 +38,27 @@ def remove_spaces(text):
     >>> remove_spaces("   ")
     ''
     """
-    return text.strip()
-
-    #while text[1] == " ":
-        #text = text.replace(text[1], "")
-    #while text[len(text) - 1] == " ":
-        #text = text.replace(text[len(text) - 1], "")
-    #return text
+    #return text.strip()
+    
+    remove_chars = (' ','\n','\t')
+    first_char = 0
+    last_char = 0
+    
+    for index, letter in enumerate(text):
+        if not first_char and letter not in remove_chars:
+            first_char = index
+            break
+    
+    for index, letter in enumerate(text[::-1]):
+        if not last_char and letter not in remove_chars:
+            last_char = -(index + 1)
+            break
+    #return last_char
+    if last_char == -1:
+        last_char = len(text) -1
+    elif text.isspace():
+        return ""
+    return text[first_char:last_char+1]
 
 
 def normalise_input(user_input):
@@ -59,7 +73,10 @@ def normalise_input(user_input):
     >>> normalise_input("HELP!!!!!!!")
     'help'
     """
-    
+
+    new_input = remove_punct(user_input)
+    new_input = remove_spaces(new_input)
+    return new_input.lower()
 
     
 def display_room(room):
@@ -99,7 +116,9 @@ def exit_leads_to(exits, direction):
     >>> exit_leads_to(rooms["Tutor"]["exits"], "west")
     'Reception'
     """
-    pass
+    go_to = exits[direction]
+    a = rooms[go_to]
+    return a["name"]
     
 
 def print_menu_line(direction, leads_to):
@@ -110,8 +129,8 @@ def print_menu_line(direction, leads_to):
     Go <EXIT NAME UPPERCASE> to <where it leads>.
 
     For example:
-    >>> print_menu_line("east", "you personal tutor's office")
-    Go EAST to you personal tutor's office.
+    >>> print_menu_line("east", "your personal tutor's office")
+    Go EAST to your personal tutor's office.
     >>> print_menu_line("south", "MJ and Simon's room")
     Go SOUTH to MJ and Simon's room.
     """
@@ -136,7 +155,7 @@ def print_menu(exits):
     print("You can:")
     
     for key,val in exits.items():
-        print_menu_line(key, val)
+        print_menu_line(key, exit_leads_to(exits,key))
     # COMPLETE THIS PART:
     # Iterate over available exits:
     #     and for each exit print the appropriate menu line
@@ -161,9 +180,9 @@ def is_valid_exit(exits, user_input):
     True
     """
     if user_input in exits:
-    	return True
+        return True
     else:
-    	return False
+        return False
 
 
 def menu(exits):
@@ -181,19 +200,18 @@ def menu(exits):
         # COMPLETE THIS PART:
         
         # Display menu
-
+        print_menu(exits)
         # Read player's input
-
+        direction = input()
         # Normalise the input
-
+        direction = normalise_input(direction)
         # Check if the input makes sense (is valid exit)
             # If so, return the player's choice
-        print_menu(exits)
-        direction = input()
         if is_valid_exit(exits, direction):
             return direction
         else:
-        	continue
+            print("\nYour input is invalid \n")
+            continue
 
 
 def move(exits, direction):
@@ -208,8 +226,7 @@ def move(exits, direction):
     >>> move(rooms["Reception"]["exits"], "west") == rooms["Office"]
     False
     """
-    key = exits[direction]
-    return rooms[key]
+    return rooms[exits[direction]]
 
 # This is the entry point of our program
 def main():
