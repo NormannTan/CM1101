@@ -231,9 +231,9 @@ def execute_go(direction):
         current_room = move(current_room["exits"], direction)
         print(clear)
         print("Moving to " + current_room["name"])
-        for count in range(3):
-            time.sleep(1)
-            print("\n.")
+        #for count in range(3):
+            #time.sleep(1)
+            #print("\n.")
         input("Press any key to continue")
     else:
         print(clear)
